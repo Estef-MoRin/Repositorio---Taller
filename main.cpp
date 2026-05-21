@@ -188,8 +188,13 @@ int main()
 
                         ball.setPosition(500.f, 350.f);
 
-                        float ballSpeedX = 0.35f;
-                        float ballSpeedY = 0.35f;
+                        float initialBallSpeedX = 0.35f;
+                        float initialBallSpeedY = 0.35f;
+
+                        float ballSpeedX = initialBallSpeedX;
+                        float ballSpeedY = initialBallSpeedY;
+
+                        float maxBallSpeed = 1.8f;
 
                         // =========================
                         // JUGADOR IZQUIERDO
@@ -328,8 +333,11 @@ int main()
                             {
                                 ballSpeedX = std::abs(ballSpeedX);
 
-                                ballSpeedX *= acceleration;
-                                ballSpeedY *= acceleration;
+                                if (std::abs(ballSpeedX) < maxBallSpeed)
+                                {
+                                    ballSpeedX *= acceleration;
+                                    ballSpeedY *= acceleration;
+                                }
                             }
 
                             if (
@@ -340,8 +348,11 @@ int main()
                             {
                                 ballSpeedX = -std::abs(ballSpeedX);
 
-                                ballSpeedX *= acceleration;
-                                ballSpeedY *= acceleration;
+                                if (std::abs(ballSpeedX) < maxBallSpeed)
+                                {
+                                    ballSpeedX *= acceleration;
+                                    ballSpeedY *= acceleration;
+                                }
                             }
 
                             // =========================
@@ -350,13 +361,14 @@ int main()
 
                             // Punto jugador derecho
 
-                            if (ball.getPosition().x < 0)
+                             if (ball.getPosition().x < 0)
                             {
                                 rightScore++;
 
                                 ball.setPosition(500.f, 350.f);
 
-                                ballSpeedX = std::abs(ballSpeedX);
+                                ballSpeedX = std::abs(initialBallSpeedX);
+                                ballSpeedY = initialBallSpeedY;
                             }
 
                             // Punto jugador izquierdo
@@ -367,7 +379,8 @@ int main()
 
                                 ball.setPosition(500.f, 350.f);
 
-                                ballSpeedX = -std::abs(ballSpeedX);
+                                ballSpeedX = -std::abs(initialBallSpeedX);
+                                ballSpeedY = initialBallSpeedY;
                             }
 
                             // =========================
