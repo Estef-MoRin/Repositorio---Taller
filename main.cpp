@@ -318,6 +318,8 @@ int main()
                             // COLISIONES
                             // =========================
 
+                            float acceleration = 1.05f;
+
                             if (
                                 ball.getGlobalBounds().intersects(
                                     leftPaddle.getGlobalBounds()
@@ -325,6 +327,9 @@ int main()
                             )
                             {
                                 ballSpeedX = std::abs(ballSpeedX);
+
+                                ballSpeedX *= acceleration;
+                                ballSpeedY *= acceleration;
                             }
 
                             if (
@@ -334,6 +339,9 @@ int main()
                             )
                             {
                                 ballSpeedX = -std::abs(ballSpeedX);
+
+                                ballSpeedX *= acceleration;
+                                ballSpeedY *= acceleration;
                             }
 
                             // =========================
