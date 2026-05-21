@@ -1,5 +1,4 @@
 #include <SFML/Graphics.hpp>
-#include <cmath>
 
 int main()
 {
@@ -157,7 +156,27 @@ int main()
                             return -1;
                         }
 
-                        
+                        // =========================
+                        // PUNTAJES
+                        // =========================
+
+                        int leftScore = 0;
+                        int rightScore = 0;
+
+                        sf::Text leftText;
+                        sf::Text rightText;
+
+                        leftText.setFont(font);
+                        rightText.setFont(font);
+
+                        leftText.setCharacterSize(60);
+                        rightText.setCharacterSize(60);
+
+                        leftText.setFillColor(sf::Color::White);
+                        rightText.setFillColor(sf::Color::White);
+
+                        leftText.setPosition(350.f, 20.f);
+                        rightText.setPosition(600.f, 20.f);
 
                         // =========================
                         // PELOTA
@@ -231,6 +250,13 @@ int main()
                                     window.close();
                                 }
                             }
+
+                            // =========================
+                            // ACTUALIZAR TEXTO
+                            // =========================
+
+                            leftText.setString(std::to_string(leftScore));
+                            rightText.setString(std::to_string(rightScore));
 
                             // =========================
                             // CONTROLES
@@ -310,7 +336,32 @@ int main()
                                 ballSpeedX = -std::abs(ballSpeedX);
                             }
 
-                        
+                            // =========================
+                            // PUNTOS
+                            // =========================
+
+                            // Punto jugador derecho
+
+                            if (ball.getPosition().x < 0)
+                            {
+                                rightScore++;
+
+                                ball.setPosition(500.f, 350.f);
+
+                                ballSpeedX = std::abs(ballSpeedX);
+                            }
+
+                            // Punto jugador izquierdo
+
+                            if (ball.getPosition().x > 1000)
+                            {
+                                leftScore++;
+
+                                ball.setPosition(500.f, 350.f);
+
+                                ballSpeedX = -std::abs(ballSpeedX);
+                            }
+
                             // =========================
                             // DIBUJAR
                             // =========================
@@ -325,9 +376,12 @@ int main()
 
                             window.draw(ball);
 
+                            window.draw(leftText);
+
+                            window.draw(rightText);
+
                             window.display();
                         }
-
                     }
 
                     // =========================
