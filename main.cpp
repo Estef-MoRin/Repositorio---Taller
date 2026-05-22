@@ -1,4 +1,5 @@
 #include <SFML/Graphics.hpp>
+#include <vector>
 
 int main()
 {
@@ -155,6 +156,47 @@ int main()
                         {
                             return -1;
                         }
+
+                        // =========================
+                        // PUNTAJES
+                        // =========================
+
+                        int leftScore = 0;
+                        int rightScore = 0;
+
+                        sf::Text leftText;
+                        sf::Text rightText;
+
+                        leftText.setFont(font);
+                        rightText.setFont(font);
+
+                        leftText.setCharacterSize(60);
+                        rightText.setCharacterSize(60);
+
+                        leftText.setFillColor(sf::Color::White);
+                        rightText.setFillColor(sf::Color::White);
+
+                        leftText.setPosition(350.f, 20.f);
+                        rightText.setPosition(600.f, 20.f);
+
+                        // =========================
+                        // PELOTA
+                        // =========================
+
+                        sf::CircleShape ball(10.f);
+
+                        ball.setFillColor(sf::Color::White);
+
+                        ball.setPosition(500.f, 350.f);
+
+                        float initialBallSpeedX = 0.35f;
+                        float initialBallSpeedY = 0.35f;
+
+                        float ballSpeedX = initialBallSpeedX;
+                        float ballSpeedY = initialBallSpeedY;
+
+                        float maxBallSpeed = 1.8f;
+
                         // =========================
                         // JUGADOR IZQUIERDO
                         // =========================
@@ -215,6 +257,12 @@ int main()
                                 }
                             }
 
+                            // =========================
+                            // ACTUALIZAR TEXTO
+                            // =========================
+
+                            leftText.setString(std::to_string(leftScore));
+                            rightText.setString(std::to_string(rightScore));
 
                             // =========================
                             // CONTROLES
@@ -252,9 +300,90 @@ int main()
                                 }
                             }
 
-                           
+                            // =========================
+                            // MOVIMIENTO PELOTA
+                            // =========================
 
-                        
+                            ball.move(ballSpeedX, ballSpeedY);
+
+                            // =========================
+                            // REBOTE ARRIBA / ABAJO
+                            // =========================
+
+                            if (ball.getPosition().y <= 0)
+                            {
+                                ballSpeedY = std::abs(ballSpeedY);
+                            }
+
+                            if (ball.getPosition().y >= 680)
+                            {
+                                ballSpeedY = -std::abs(ballSpeedY);
+                            }
+
+                            // =========================
+                            // COLISIONES
+                            // =========================
+
+                            float acceleration = 1.05f;
+
+                            if (
+                                ball.getGlobalBounds().intersects(
+                                    leftPaddle.getGlobalBounds()
+                                )
+                            )
+                            {
+                                ballSpeedX = std::abs(ballSpeedX);
+
+                                if (std::abs(ballSpeedX) < maxBallSpeed)
+                                {
+                                    ballSpeedX *= acceleration;
+                                    ballSpeedY *= acceleration;
+                                }
+                            }
+
+                            if (
+                                ball.getGlobalBounds().intersects(
+                                    rightPaddle.getGlobalBounds()
+                                )
+                            )
+                            {
+                                ballSpeedX = -std::abs(ballSpeedX);
+
+                                if (std::abs(ballSpeedX) < maxBallSpeed)
+                                {
+                                    ballSpeedX *= acceleration;
+                                    ballSpeedY *= acceleration;
+                                }
+                            }
+
+                            // =========================
+                            // PUNTOS
+                            // =========================
+
+                            // Punto jugador derecho
+
+                             if (ball.getPosition().x < 0)
+                            {
+                                rightScore++;
+
+                                ball.setPosition(500.f, 350.f);
+
+                                ballSpeedX = std::abs(initialBallSpeedX);
+                                ballSpeedY = initialBallSpeedY;
+                            }
+
+                            // Punto jugador izquierdo
+
+                            if (ball.getPosition().x > 1000)
+                            {
+                                leftScore++;
+
+                                ball.setPosition(500.f, 350.f);
+
+                                ballSpeedX = -std::abs(initialBallSpeedX);
+                                ballSpeedY = initialBallSpeedY;
+                            }
+
                             // =========================
                             // DIBUJAR
                             // =========================
@@ -267,11 +396,17 @@ int main()
 
                             window.draw(rightPaddle);
 
+                            window.draw(ball);
+
+                            window.draw(leftText);
+
+                            window.draw(rightText);
+
                             window.display();
                         }
                     }
 
-                    // =========================    
+                    // =========================
                     // BOTON BLOQUES
                     // =========================
 
@@ -284,9 +419,140 @@ int main()
                         )
                     )
                     {
-                        blocksButton.setFillColor(
-                            sf::Color::Blue
+                        // =========================
+                        // VENTANA
+                        // =========================
+
+                        sf::RenderWindow window(
+                            sf::VideoMode(1000, 700),
+                            "BREAKOUT"
                         );
+
+                        window.setFramerateLimit(144);
+
+                        // =========================
+                        // FUENTE
+                        // =========================
+
+                        sf::Font font;
+
+                        if (!font.loadFromFile("font.ttf"))
+                        {
+                            return -1;
+                        }
+
+                        // =========================
+                        // PUNTAJE
+                        // =========================
+
+                        int score = 0;
+
+                        sf::Text scoreText;
+
+                        scoreText.setFont(font);
+
+                        scoreText.setCharacterSize(40);
+
+                        scoreText.setFillColor(sf::Color::White);
+
+                        scoreText.setPosition(20.f, 20.f);
+
+                        // =========================
+                        // PELOTA
+                        // =========================
+
+                        sf::CircleShape ball(10.f);
+
+                        ball.setFillColor(sf::Color::White);
+
+                        ball.setPosition(500.f, 500.f);
+
+                        float ballSpeedX = 0.4f;
+                        float ballSpeedY = -0.4f;
+
+                        // =========================
+                        // BARRA JUGADOR
+                        // =========================
+
+                        sf::RectangleShape paddle(
+                            sf::Vector2f(150.f, 20.f)
+                        );
+
+                        paddle.setFillColor(sf::Color::White);
+
+                        paddle.setPosition(425.f, 650.f);
+
+                        float paddleSpeed = 0.7f;
+
+                        
+                        // =========================
+                        // BUCLE PRINCIPAL
+                        // =========================
+
+                        while (window.isOpen())
+                        {
+                            // =========================
+                            // EVENTOS
+                            // =========================
+
+                            sf::Event event;
+
+                            while (window.pollEvent(event))
+                            {
+                                if (event.type == sf::Event::Closed)
+                                {
+                                    window.close();
+                                }
+                            }
+
+
+                            // =========================
+                            // MOVIMIENTO JUGADOR
+                            // =========================
+
+                            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+                            {
+                                if (paddle.getPosition().x > 0)
+                                {
+                                    paddle.move(-paddleSpeed, 0.f);
+                                }
+                            }
+
+                            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+                            {
+                                if (paddle.getPosition().x < 850)
+                                {
+                                    paddle.move(paddleSpeed, 0.f);
+                                }
+                            }
+
+                            // =========================
+                            // MOVIMIENTO PELOTA
+                            // =========================
+
+                            ball.move(ballSpeedX, ballSpeedY);
+
+                            
+
+                        
+
+                            // =========================
+                            // DIBUJAR
+                            // =========================
+
+                            window.clear(sf::Color::Black);
+
+
+                            // Dibujar elementos
+
+                            window.draw(ball);
+
+                            window.draw(paddle);
+
+                            window.draw(scoreText);
+
+                            window.display();
+                        }
                     }
                 }
             }
