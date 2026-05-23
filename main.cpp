@@ -441,22 +441,7 @@ int main()
                             return -1;
                         }
 
-                        // =========================
-                        // PUNTAJE
-                        // =========================
-
-                        int score = 0;
-
-                        sf::Text scoreText;
-
-                        scoreText.setFont(font);
-
-                        scoreText.setCharacterSize(40);
-
-                        scoreText.setFillColor(sf::Color::White);
-
-                        scoreText.setPosition(20.f, 20.f);
-
+                      
                         // =========================
                         // PELOTA
                         // =========================
@@ -484,36 +469,7 @@ int main()
 
                         float paddleSpeed = 0.7f;
 
-                        // =========================
-                        // BLOQUES
-                        // =========================
-
-                        std::vector<sf::RectangleShape> blocks;
-
-                        for (int row = 0; row < 5; row++)
-                        {
-                            for (int col = 0; col < 8; col++)
-                            {
-                                sf::RectangleShape block(
-                                    sf::Vector2f(100.f, 30.f)
-                                );
-
-                                block.setPosition(
-                                    70.f + col * 110.f,
-                                    70.f + row * 40.f
-                                );
-
-                                block.setFillColor(
-                                    sf::Color(
-                                        100 + row * 25,
-                                        50 + col * 20,
-                                        200
-                                    )
-                                );
-
-                                blocks.push_back(block);
-                            }
-                        }
+                        
 
                         // =========================
                         // BUCLE PRINCIPAL
@@ -535,14 +491,7 @@ int main()
                                 }
                             }
 
-                            // =========================
-                            // ACTUALIZAR TEXTO
-                            // =========================
-
-                            scoreText.setString(
-                                "Puntos: " + std::to_string(score)
-                            );
-
+                           
                             // =========================
                             // MOVIMIENTO JUGADOR
                             // =========================
@@ -569,82 +518,8 @@ int main()
 
                             ball.move(ballSpeedX, ballSpeedY);
 
-                            // =========================
-                            // REBOTE PAREDES
-                            // =========================
-
-                            if (ball.getPosition().x <= 0)
-                            {
-                                ballSpeedX = std::abs(ballSpeedX);
-                            }
-
-                            if (ball.getPosition().x >= 980)
-                            {
-                                ballSpeedX = -std::abs(ballSpeedX);
-                            }
-
-                            if (ball.getPosition().y <= 0)
-                            {
-                                ballSpeedY = std::abs(ballSpeedY);
-                            }
-
-                            // =========================
-                            // REBOTE BARRA
-                            // =========================
-
-                            if (
-                                ball.getGlobalBounds().intersects(
-                                    paddle.getGlobalBounds()
-                                )
-                            )
-                            {
-                                ballSpeedY = -std::abs(ballSpeedY);
-                            }
-
-                            // =========================
-                            // COLISION BLOQUES
-                            // =========================
-
-                            for (int i = 0; i < blocks.size(); i++)
-                            {
-                                if (
-                                    ball.getGlobalBounds().intersects(
-                                        blocks[i].getGlobalBounds()
-                                    )
-                                )
-                                {
-                                    ballSpeedY = -ballSpeedY;
-
-                                    blocks.erase(blocks.begin() + i);
-
-                                    score++;
-
-                                    break;
-                                }
-                            }
-                            // =========================
-                            // GANAR
-                            // =========================
-
-                            if (blocks.empty())
-                            {
-                                window.close();
-                            }
-
-                            // =========================
-                            // PERDER
-                            // =========================
-
-                            if (ball.getPosition().y > 700)
-                            {
-                                ball.setPosition(500.f, 500.f);
-
-                                ballSpeedX = 0.4f;
-
-                                ballSpeedY = -0.4f;
-
-                                score = 0;
-                            }
+                           
+                            
 
                             // =========================
                             // DIBUJAR
@@ -652,20 +527,13 @@ int main()
 
                             window.clear(sf::Color::Black);
 
-                            // Dibujar bloques
-
-                            for (auto& block : blocks)
-                            {
-                                window.draw(block);
-                            }
+                            
 
                             // Dibujar elementos
 
                             window.draw(ball);
 
                             window.draw(paddle);
-
-                            window.draw(scoreText);
 
                             window.display();
                         }
