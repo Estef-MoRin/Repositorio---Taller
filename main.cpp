@@ -430,18 +430,8 @@ int main()
 
                         window.setFramerateLimit(144);
 
-                        // =========================
-                        // FUENTE
-                        // =========================
+                        
 
-                        sf::Font font;
-
-                        if (!font.loadFromFile("font.ttf"))
-                        {
-                            return -1;
-                        }
-
-                      
                         // =========================
                         // PELOTA
                         // =========================
@@ -469,7 +459,36 @@ int main()
 
                         float paddleSpeed = 0.7f;
 
-                        
+                        // =========================
+                        // BLOQUES
+                        // =========================
+
+                        std::vector<sf::RectangleShape> blocks;
+
+                        for (int row = 0; row < 5; row++)
+                        {
+                            for (int col = 0; col < 8; col++)
+                            {
+                                sf::RectangleShape block(
+                                    sf::Vector2f(100.f, 30.f)
+                                );
+
+                                block.setPosition(
+                                    70.f + col * 110.f,
+                                    70.f + row * 40.f
+                                );
+
+                                block.setFillColor(
+                                    sf::Color(
+                                        100 + row * 25,
+                                        50 + col * 20,
+                                        200
+                                    )
+                                );
+
+                                blocks.push_back(block);
+                            }
+                        }
 
                         // =========================
                         // BUCLE PRINCIPAL
@@ -491,7 +510,7 @@ int main()
                                 }
                             }
 
-                           
+                            
                             // =========================
                             // MOVIMIENTO JUGADOR
                             // =========================
@@ -518,7 +537,9 @@ int main()
 
                             ball.move(ballSpeedX, ballSpeedY);
 
-                           
+                            
+
+                            
                             
 
                             // =========================
@@ -527,7 +548,12 @@ int main()
 
                             window.clear(sf::Color::Black);
 
-                            
+                            // Dibujar bloques
+
+                            for (auto& block : blocks)
+                            {
+                                window.draw(block);
+                            }
 
                             // Dibujar elementos
 
