@@ -574,7 +574,33 @@ if (
     ballSpeedY = -std::abs(ballSpeedY);
 }
                             
-                            
+ 
+// =========================
+// COLISION BLOQUES
+// =========================
+
+for (int i = 0; i < blocks.size(); i++)
+{
+    if (
+        ball.getGlobalBounds().intersects(
+            blocks[i].getGlobalBounds()
+        )
+    )
+    {
+        // Rebote de la pelota
+
+        ballSpeedY = -ballSpeedY;
+
+        // Destruir bloque
+
+        blocks.erase(blocks.begin() + i);
+
+        // Evitar multiples colisiones
+        // en el mismo frame
+
+        break;
+    }
+}
 
                             // =========================
                             // DIBUJAR
