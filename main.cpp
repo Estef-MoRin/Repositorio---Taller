@@ -430,7 +430,32 @@ int main()
 
                         window.setFramerateLimit(144);
 
-                        
+                        // =========================
+                        // FUENTE
+                        // =========================
+
+                        sf::Font font;
+
+                        if (!font.loadFromFile("font.ttf"))
+                        {
+                            return -1;
+                        }
+
+                        // =========================
+                        // PUNTAJE
+                        // =========================
+
+                        int score = 0;
+
+                        sf::Text scoreText;
+
+                        scoreText.setFont(font);
+
+                        scoreText.setCharacterSize(40);
+
+                        scoreText.setFillColor(sf::Color::White);
+
+                        scoreText.setPosition(20.f, 20.f);
 
                         // =========================
                         // PELOTA
@@ -510,7 +535,14 @@ int main()
                                 }
                             }
 
-                            
+                            // =========================
+                            // ACTUALIZAR TEXTO
+                            // =========================
+
+                            scoreText.setString(
+                                "Puntos: " + std::to_string(score)
+                            );
+
                             // =========================
                             // MOVIMIENTO JUGADOR
                             // =========================
@@ -530,78 +562,67 @@ int main()
                                     paddle.move(paddleSpeed, 0.f);
                                 }
                             }
-// =========================
-// MOVIMIENTO PELOTA
-// =========================
 
-ball.move(ballSpeedX, ballSpeedY);
+                            // =========================
+                            // MOVIMIENTO PELOTA
+                            // =========================
 
-// =========================
-// REBOTE PAREDES
-// =========================
+                            ball.move(ballSpeedX, ballSpeedY);
 
-// Pared izquierda
+                            // =========================
+                            // REBOTE PAREDES
+                            // =========================
 
-if (ball.getPosition().x <= 0)
-{
-    ballSpeedX = std::abs(ballSpeedX);
-}
+                            if (ball.getPosition().x <= 0)
+                            {
+                                ballSpeedX = std::abs(ballSpeedX);
+                            }
 
-// Pared derecha
+                            if (ball.getPosition().x >= 980)
+                            {
+                                ballSpeedX = -std::abs(ballSpeedX);
+                            }
 
-if (ball.getPosition().x >= 980)
-{
-    ballSpeedX = -std::abs(ballSpeedX);
-}
+                            if (ball.getPosition().y <= 0)
+                            {
+                                ballSpeedY = std::abs(ballSpeedY);
+                            }
 
-// Pared superior
+                            // =========================
+                            // REBOTE BARRA
+                            // =========================
 
-if (ball.getPosition().y <= 0)
-{
-    ballSpeedY = std::abs(ballSpeedY);
-}
+                            if (
+                                ball.getGlobalBounds().intersects(
+                                    paddle.getGlobalBounds()
+                                )
+                            )
+                            {
+                                ballSpeedY = -std::abs(ballSpeedY);
+                            }
 
-// =========================
-// REBOTE BARRA
-// =========================
+                            // =========================
+                            // COLISION BLOQUES
+                            // =========================
 
-if (
-    ball.getGlobalBounds().intersects(
-        paddle.getGlobalBounds()
-    )
-)
-{
-    ballSpeedY = -std::abs(ballSpeedY);
-}
+                            for (int i = 0; i < blocks.size(); i++)
+                            {
+                                if (
+                                    ball.getGlobalBounds().intersects(
+                                        blocks[i].getGlobalBounds()
+                                    )
+                                )
+                                {
+                                    ballSpeedY = -ballSpeedY;
+
+                                    blocks.erase(blocks.begin() + i);
+
+                                    score++;
+
+                                    break;
+                                }
+                            }
                             
- 
-// =========================
-// COLISION BLOQUES
-// =========================
-
-for (int i = 0; i < blocks.size(); i++)
-{
-    if (
-        ball.getGlobalBounds().intersects(
-            blocks[i].getGlobalBounds()
-        )
-    )
-    {
-        // Rebote de la pelota
-
-        ballSpeedY = -ballSpeedY;
-
-        // Destruir bloque
-
-        blocks.erase(blocks.begin() + i);
-
-        // Evitar multiples colisiones
-        // en el mismo frame
-
-        break;
-    }
-}
-
                             // =========================
                             // DIBUJAR
                             // =========================
@@ -620,6 +641,8 @@ for (int i = 0; i < blocks.size(); i++)
                             window.draw(ball);
 
                             window.draw(paddle);
+
+                            window.draw(scoreText);
 
                             window.display();
                         }
