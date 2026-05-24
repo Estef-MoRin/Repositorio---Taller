@@ -530,15 +530,49 @@ int main()
                                     paddle.move(paddleSpeed, 0.f);
                                 }
                             }
+// =========================
+// MOVIMIENTO PELOTA
+// =========================
 
-                            // =========================
-                            // MOVIMIENTO PELOTA
-                            // =========================
+ball.move(ballSpeedX, ballSpeedY);
 
-                            ball.move(ballSpeedX, ballSpeedY);
+// =========================
+// REBOTE PAREDES
+// =========================
 
-                            
+// Pared izquierda
 
+if (ball.getPosition().x <= 0)
+{
+    ballSpeedX = std::abs(ballSpeedX);
+}
+
+// Pared derecha
+
+if (ball.getPosition().x >= 980)
+{
+    ballSpeedX = -std::abs(ballSpeedX);
+}
+
+// Pared superior
+
+if (ball.getPosition().y <= 0)
+{
+    ballSpeedY = std::abs(ballSpeedY);
+}
+
+// =========================
+// REBOTE BARRA
+// =========================
+
+if (
+    ball.getGlobalBounds().intersects(
+        paddle.getGlobalBounds()
+    )
+)
+{
+    ballSpeedY = -std::abs(ballSpeedY);
+}
                             
                             
 
