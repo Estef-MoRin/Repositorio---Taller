@@ -622,7 +622,30 @@ int main()
                                     break;
                                 }
                             }
-                            
+                            // =========================
+                            // GANAR
+                            // =========================
+
+                            if (blocks.empty())
+                            {
+                                window.close();
+                            }
+
+                            // =========================
+                            // PERDER
+                            // =========================
+
+                            if (ball.getPosition().y > 700)
+                            {
+                                ball.setPosition(500.f, 500.f);
+
+                                ballSpeedX = 0.4f;
+
+                                ballSpeedY = -0.4f;
+
+                                score = 0;
+                            }
+
                             // =========================
                             // DIBUJAR
                             // =========================
